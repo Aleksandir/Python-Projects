@@ -1,9 +1,9 @@
 import turtle as t
 import random
- 
+
 w = 500 # Width of box
 h = 500 # Height of box
-food_size = 10 # Size of food
+food_size = 20 # Size of food
 delay = 100 # in millisecond
 
 # Values by which snake will move in direction when given direction
@@ -20,7 +20,7 @@ SCORE = 0
 
 def reset():
     global snake, snake_dir, food_position, pen
- 
+
     snake = [[0,0],[0,20],[0,40],[0,60],[0,80]]
     snake_dir = "up" #default snake direction
     food_position = get_random_food_position()
@@ -29,21 +29,21 @@ def reset():
 
 def move_snake():
     global snake_dir,SCORE
- 
+
     new_head = snake[-1].copy()
     new_head[0] = snake[-1][0] + offsets[snake_dir][0]
     new_head[1] = snake[-1][1] + offsets[snake_dir][1]
-    
+
     if new_head in snake[:-1]:
         print(SCORE)
         reset()
     else:
         snake.append(new_head)
- 
-     
+
+
         if not food_collision():
             snake.pop(0)
- 
+
         if snake[-1][0] > w / 2:
             snake[-1][0] -= w
         elif snake[-1][0] < - w / 2:
@@ -54,37 +54,37 @@ def move_snake():
             snake[-1][1] += h
 
         pen.clearstamps()
-      
+
         for segment in snake:
             pen.goto(segment[0], segment[1])
             pen.stamp()
-       
-        screen.update() 
+
+        screen.update()
         t.ontimer(move_snake, delay)
- 
+
 # If snake collides with food
 def food_collision():
     global food_position, SCORE
     if get_distance(snake[-1], food_position) < 20:
-        SCORE += 10
+        SCORE += 1000
         food_position = get_random_food_position()
         food.goto(food_position)
         return True
     return False
- 
+
 # Random position for food
 def get_random_food_position():
     x = random.randint(- w / 2 + food_size, w / 2 - food_size)
     y = random.randint(- h / 2 + food_size, h / 2 - food_size)
     return (x, y)
- 
+
 
 def get_distance(pos1, pos2):
     x1, y1 = pos1
     x2, y2 = pos2
     distance = ((y2 - y1) ** 2 + (x2 - x1) ** 2) ** 0.5
     return distance
-  
+
 # Control
 def go_up():
     global snake_dir
